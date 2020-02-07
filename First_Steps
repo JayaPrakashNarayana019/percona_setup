@@ -1,0 +1,82 @@
+Install Docker if Docker software is not present.
+https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-centos-7
+
+#Percona Repo 
+#intall on percona server and  client 
+sudo yum install https://repo.percona.com/yum/percona-release-latest.noarch.rpm
+
+Installing Percona Server Using Docker 
+https://www.percona.com/doc/percona-monitoring-and-management/deploy/server/docker.html
+
+#Docker Image:
+docker pull percona/pmm-server:1
+
+#create 
+docker run -d \
+   -p 80:80 \
+   --volumes-from pmm-data \
+   --name pmm-server \
+   --restart always \
+   percona/pmm-server:1
+   
+#Run the image 
+docker run -d \
+   -p 80:80 \
+   --volumes-from pmm-data \
+   --name pmm-server \
+   --restart always \
+   percona/pmm-server:1
+
+
+Intalling Percona client on Mysql DB Servers 
+- yum install pmm-client
+    - To start pmm client to send metrics to Percona server we need to add pmm-server config in client.
+        - pmm-admin config --server IP_ADDRESS:PORT
+        Example : pmm-admin config --server 10.1.80.190:81
+        
+        - pmm-admin add mysql --user jnaguboina --password passwd
+            ** Incase if you are doing log rotation using log rotate we need to add below step to client 
+                -  pmm-admin add mysql --user (USER_NAME) --password (DB-PASSWD) --slow_log_rotation=false
+        
+Stopping Monitoring on clients
+- pmm-admin stop --all
+
+**************pmm-admin usage:**********
+
+Usage:
+pmm-admin add mysql [flags] [name]
+
+Examples:
+pmm-admin add mysql --password abc123
+pmm-admin add mysql --password abc123 --create-user
+pmm-admin add mysql --password abc123 --port 3307 instance3307
+
+Flags:
+--create-user create a new MySQL user
+--create-user-maxconn uint16 max user connections for a new user (default 10)
+--create-user-password string optional password for a new MySQL user
+--defaults-file string path to my.cnf
+--disable-binlogstats disable binlog statistics
+--disable-processlist disable process state metrics
+--disable-queryexamples disable collection of query examples
+--disable-ssl disable ssl mode on exporter
+--disable-tablestats disable table statistics
+--disable-tablestats-limit uint16 number of tables after which table stats are disabled automatically (default 1000)
+--disable-userstats disable user statistics
+--force force to create/update MySQL user
+-h, --help help for mysql
+--host string MySQL host
+--password string MySQL password
+--port string MySQL port
+--query-source string source of SQL queries: auto, slowlog, perfschema (default "auto")
+--retain-slow-logs int number of slow logs to retain after rotation (default 1)
+--slow-log-rotation enable slow log rotation (default true)
+--socket string MySQL socket
+--user string MySQL username
+
+Global Flags:
+-c, --config-file string PMM config file (default "/usr/local/percona/pmm-client/pmm.yml")
+--service-port int service port
+--skip-root skip UID check (experimental)
+--timeout duration timeout (default 5s)
+--verbose verbose output
