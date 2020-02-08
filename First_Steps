@@ -1,45 +1,45 @@
-Install Docker if Docker software is not present.
-https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-centos-7
+1- Install Docker if Docker software is not present.
+      https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-centos-7
 
-#Percona Repo 
-#intall on percona server and  client 
-sudo yum install https://repo.percona.com/yum/percona-release-latest.noarch.rpm
+2- #Percona Repo 
+      #intall on percona server and  client 
+         sudo yum install https://repo.percona.com/yum/percona-release-latest.noarch.rpm
 
-Installing Percona Server Using Docker 
-https://www.percona.com/doc/percona-monitoring-and-management/deploy/server/docker.html
+3- Installing Percona Server Using Docker 
+         https://www.percona.com/doc/percona-monitoring-and-management/deploy/server/docker.html
 
-#Docker Image:
-docker pull percona/pmm-server:1
+      3-a) Docker Image:
+           docker pull percona/pmm-server:1
 
-#create 
-docker run -d \
-   -p 80:80 \
-   --volumes-from pmm-data \
-   --name pmm-server \
-   --restart always \
-   percona/pmm-server:1
-   
-#Run the image 
-docker run -d \
-   -p 80:80 \
-   --volumes-from pmm-data \
-   --name pmm-server \
-   --restart always \
-   percona/pmm-server:1
+      3-b) create 
+            docker run -d \
+               -p 80:80 \
+               --volumes-from pmm-data \
+               --name pmm-server \
+               --restart always \
+               percona/pmm-server:1
+
+            #Run the image 
+            docker run -d \
+               -p 80:80 \
+               --volumes-from pmm-data \
+               --name pmm-server \
+               --restart always \
+               percona/pmm-server:1
 
 
-Intalling Percona client on Mysql DB Servers 
-- yum install pmm-client
-    - To start pmm client to send metrics to Percona server we need to add pmm-server config in client.
-        - pmm-admin config --server IP_ADDRESS:PORT
-        Example : pmm-admin config --server 10.1.80.190:81
-        
-        - pmm-admin add mysql --user jnaguboina --password passwd
-            ** Incase if you are doing log rotation using log rotate we need to add below step to client 
-                -  pmm-admin add mysql --user (USER_NAME) --password (DB-PASSWD) --slow_log_rotation=false
-        
-Stopping Monitoring on clients
-- pmm-admin stop --all
+4- #Intalling Percona client on Mysql DB Servers 
+      - yum install pmm-client
+          - To start pmm client to send metrics to Percona server we need to add pmm-server config in client.
+              - pmm-admin config --server IP_ADDRESS:PORT
+              Example : pmm-admin config --server 10.1.80.190:81
+
+              - pmm-admin add mysql --user jnaguboina --password passwd
+                  ** Incase if you are doing log rotation using log rotate we need to add below step to client 
+                      -  pmm-admin add mysql --user (USER_NAME) --password (DB-PASSWD) --slow_log_rotation=false
+
+5- #Stopping Monitoring on clients
+      - pmm-admin stop --all
 
 **************pmm-admin usage:**********
 
